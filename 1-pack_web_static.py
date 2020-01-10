@@ -3,14 +3,15 @@
 from fabric.api import local
 from datetime import datetime
 
+n = datetime.now()
+
 def do_pack():
-    """
-    Generates a .tgz archive from the contents of web_static
-    """
+    """Packs web_static files into .tgz file"""
+
     time = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive = 'versions/web_static_{}.tgz'.format(time)
-    local("mkdir -p versions")
-    cmd = local("mv " + archive_name + " ./versions/")
-    if cmd.succeeded:
+    archive = 'versions/web_static_' + time + '.tgz'
+    local('mkdir -p versions')
+    command = local("mv " + archive + " ./versions/")
+    if command.succeeded:
         return archive
     return None

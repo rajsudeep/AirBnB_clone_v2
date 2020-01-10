@@ -1,40 +1,45 @@
 #!/usr/bin/python3
 
 from fabric.api import *
+from os import path
 
 env.user = 'ubuntu'
 env.hosts = ['34.74.125.245', '34.73.79.111']
 
 
 def do_deploy(archive_path):
-    """distributes an archive to web servers"""
-
-    if archive_path is None:
+    """Deploys archive"""
+    if not path.exists(archive_path):
         return False
-
-    upload = put(archive_path, '/tmp/')
-    if upload.failed:
-        return False
-    archive = archive_path.replace('.tgz', '').replace('versions/', '')
-
-    target = "/data/web_static/releases/" + filename[:-4]
-    command = "mkdir -p " + target
-    mkdir = run(command)
-    if mkdir.failed:
-        return False
-    command = "sudo tar -zxf /tmp/" + filename + " -C " + target
-    uncompress = run(command)
-    if uncompress.failed:
-        return False
-
-    run('sudo rm /tmp/' + filename)
-    run('sudo mv ' + target + '/web_static/* ' + target)
-    run('sudo rm -rf ' + target + '/web_static')
-
-    command = 'sudo ln -sf ' + target + ' /data/web_static/current'
-    link = run(command)
-    if link.failed:
-        return False
-
-    print("SUCCESS!")
-    return True
+    ret_value = True
+    a = put(archive_path, '/tmp/')
+    if a.failed:
+        ret_value = False
+    arch = archive_path.replace(".tgz", "").replace("versions/", "")
+    b = run('mkdir -p /data/web_static/releases/' + arch + '/')
+    if b.failed:
+        ret_value = False
+    c = run('tar -xzf /tmp/' + arch + '.tgz' +
+            ' -C /data/web_static/releases/' + arch + '/')
+    if c.failed:
+        ret_value = False
+    d = run('rm /tmp/' + arch + '.tgz')
+    if d.failed:
+        ret_value = False
+    e = run('mv /data/web_static/releases/' + arch +
+            '/web_static/* /data/web_static/releases/' + arch + '/')
+    if e.failed:
+        ret_value = False
+    f = run('rm -rf /data/web_static/releases/' + arch + '/web_static')
+    if f.failed:
+        ret_value = False
+    g = run('rm -rf /data/web_static/current')
+    if g.failed:
+        ret_value = False
+    h = run('ln -sf /data/web_static/releases/' + arch +
+            '/' + ' /data/web_static/current')
+    if h.failed:
+        ret_value = False
+    if ret_value:
+        print("All tasks succeeded!")
+    return ret_value

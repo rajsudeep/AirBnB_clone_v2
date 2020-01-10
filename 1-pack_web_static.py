@@ -10,7 +10,7 @@ def do_pack():
     time = datetime.now().strftime("%Y%m%d%H%M%S")
     archive = 'versions/web_static_' + time + '.tgz'
     local('mkdir -p versions')
-    command = local("tar -cvzf " + archive + " ./web_static/")
+    command = local("tar -cvzf " + archive + " web_static/")
     if command.succeeded:
         return archive
     return None

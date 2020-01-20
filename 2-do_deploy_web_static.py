@@ -39,5 +39,5 @@ def do_deploy(archive_path):
     if ln.failed:
         return False
 
-    print("All tasks succeeded!")
+    print("SUCCESS!")
     return True

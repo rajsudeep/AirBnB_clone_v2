@@ -79,3 +79,7 @@ class DBStorage:
         """Deletes obj from __objects"""
         if obj:
             self.__session.delete(obj)
+
+    def close(self):
+        """Calls close() on the private session attr"""
+        self.__session.close()

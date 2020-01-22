@@ -3,26 +3,31 @@ from flask import Flask
 
 app = Flask(__name__)
 
+
 @app.route('/', strict_slashes=False)
 def hello():
     """ Says hello """
     return "Hello HBNB!"
+
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
     """ Says HBNB """
     return "HBNB"
 
+
 @app.route('/c/<text>', strict_slashes=False)
 def c(text):
     """ Display C followed by text """
     return "C " + text.replace('_', ' ')
+
 
 @app.route('/python', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def python(text="is cool"):
     """ Display Python followed by text """
     return "Python " + text.replace('_', ' ')
+
 
 @app.route('/number/<int:n>', strict_slashes=False)
 def number(n):

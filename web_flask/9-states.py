@@ -4,6 +4,7 @@ from models import storage
 from models.state import State
 app = Flask(__name__)
 
+
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def state_id(id=None):

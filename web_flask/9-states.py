@@ -10,12 +10,13 @@ app = Flask(__name__)
 def state_id(id=None):
     """ Display state """
     state = None
-    states = storage.all(state)
+    states = storage.all(State)
     if not id:
-        state_list = list(states.values())
+        states = states.values()
     else:
-        if ("State." + id) in states.keys():
-            state = states["State." + id]
+        key = "State." + id
+        if key in states:
+            state = states[key]
     return render_template('9-states.html', **locals())
 
 
